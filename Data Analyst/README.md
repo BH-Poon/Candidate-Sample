@@ -2,7 +2,7 @@
 
 ## Requirement ##
 
-Answer <ins>three of the following questions</ins> with at least one question coming from the closed-ended and one from the open-ended question set. Each question should be answered using *one query*.
+Answer <ins>three of the following questions</ins> with at least one question coming from the closed-ended and one from the open-ended question set. Each question should be answered using **one query**.
 
 ## Closed-Ended Questions ##
 
