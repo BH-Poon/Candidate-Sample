@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-import io
 import os
 import pkg_resources
 import exercise_util_qc as qc
 import pandas as pd
-import plotly
 import sqlalchemy as alch
 import sqlalchemy_utils as alch_utils
-from PIL import Image
 
 # Must use this version of kaleido to render the image in reasonable time.
 try:
@@ -23,8 +20,17 @@ PORT = None  # Input port number if applicable
 DATABASE = "exercise_database"
 
 # Directory of where the soruce CSV are located.
-PATH_CSV = os.path.dirname(
+PATH_DIR_CSV = os.path.dirname(
     os.path.realpath(__file__)) + "\\source\\"
+
+# Directory of where this file is located.
+PATH_DIR = os.path.dirname(os.path.realpath(__file__)) + '\\'
+
+EXERCISES = {
+    '1': "q2_close_ended.sql",
+    '2': "q3_close_ended.sql",
+    '3': "q2_open_ended.sql"
+}
 
 # Dictionary in the form of table_name: dtype_dict
 TABLES = {
@@ -63,7 +69,7 @@ exercise_database.db and create it from CSV files with SQLite engine
 to use for exercise purposes.
 '''
 def establish_connection():
-
+    
     try:
         engine = alch.create_engine(
             "mysql://{0}:{1}@{2}:{3}/{4}/".format(
@@ -71,7 +77,7 @@ def establish_connection():
         )
     except Exception as e:
         print(f"Not connected to MySQL: {e}")
-        engine_url = "sqlite:///exercise_database.db"
+        engine_url = f'sqlite:///{PATH_DIR}/exercise_database.db'
 
         # Create database using SQLite if there's no database.
         if not alch_utils.database_exists(engine_url):
@@ -91,7 +97,7 @@ def create_sample_db(engine_url):
     # Load CSV tables.
     for table in TABLES.keys():
 
-        source_csv = PATH_CSV + table + ".csv"
+        source_csv = PATH_DIR_CSV + table + ".csv"
         col_names = list(TABLES.get(table).keys())
 
         df = pd.read_csv(
@@ -111,8 +117,25 @@ def create_sample_db(engine_url):
         )
         print("\tLoaded table: " + table)
     engine.dispose()
-
     return
+
+def choose_exercise():
+    exercise_key = EXERCISES.keys()
+    options = ' | '.join(exercise_key)
+
+    # Select from choice with repeated loop for error handling
+    while True:
+        # Print the options available
+        print('Select the exercise to be executed from the following:')
+        for key in exercise_key:
+            print(f'\t{key} -- {EXERCISES.get(key)}')
+        
+        # Take in user input and cast as str to compare if it's in list
+        input_select_sql = input(f'\nSelect [ {options} ]:  ')
+        if input_select_sql in exercise_key:
+            return EXERCISES.get(input_select_sql)
+        else:
+            print('Invalid Input. Please input just the number!\n')
 
 # Disconnect and, if needed, remove sample database for cleanliness.
 def disconnect_db(engine):
@@ -130,45 +153,3 @@ def disconnect_db(engine):
                     break
         except Exception as e:
             print(f"Failed to delete sample database... {e}")
-
-# Write results to sheets in an Excel file and print chart, if applicable.
-def write_output(df, sheet_name, fig=None):
-    output_dir = os.path.dirname(os.path.realpath(__file__))
-    output_path_xlsx = output_dir + '\\exercise_results.xlsx'
-    output_path_img = output_dir + f'\\img_{sheet_name.lower()}.png'
-    
-    if not os.path.exists(output_path_xlsx):
-        writer = pd.ExcelWriter(
-            path=output_path_xlsx,
-            engine='xlsxwriter'
-        )
-    else:
-        writer = pd.ExcelWriter(
-            engine='openpyxl',
-            mode='a',
-            if_sheet_exists='replace',
-            path=output_path_xlsx
-        )
-
-        
-    df.to_excel(excel_writer=writer, 
-                sheet_name=sheet_name.lower(), 
-                index=False
-    )
-    writer.close()
-    
-    if fig != None:
-        print("Generating figure...")
-        
-        # Show and save the figure locally.
-        img = plotly.io.to_image(fig=fig,
-                                 engine='kaleido',)
-        
-        Image.open(io.BytesIO(img)).show()
-
-        plotly.io.write_image(fig=fig,
-                              file = output_path_img,
-                              format='png',
-                              engine='kaleido')
-
-        print(f"Figure of {sheet_name} was saved!")

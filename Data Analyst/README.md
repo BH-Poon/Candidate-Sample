@@ -22,15 +22,18 @@ Answer **three of the following questions** with at least one question coming fr
 
 The following are the files used for the exercise:
 
-1. *exercise_util.py* - This module contains functions for connecting to a database, creating the sample database, disconnecting from the database, and writing query output to an Excel sheet. Sample database created for the exercise will be named *exercise_db.db*. Source CSV files will be stored in directly ~/source.
-2. *exercise_util_qc.py* - This module contains the controller and functions for quality control and validation on columns. 
-3. *exercise_database.db* - SQLite database file generated with all CSV files from `sqlalchemy`.
-4. *exercise_results.xlsx* - This file contains the output of indvidual exercises written in sheets within the workbook. If a sheet exists, the sheet will be written over.
-5. *q2_close_ended.py* - This file contains the Python script and SQL query for answering question.
-6. *img_q2_close_ended.png* - Simple bar chart for visualizing results from above.
-7. *q3_close_ended.py* - This file contains the Python script and SQL query for answering question.
-8. *img_q3_close_ended.png* - Simple bar chart for visualizing results from above.
-9. *exercise_3_email.md* - Sample email to product or business leader written with markdown to try to capture what it may be like on Outlook or Slack.
+1. *exercise_main.py* - This is the main driver for running SQL queries from selected SQL files.
+2. *exercise_util.py* - This module contains functions for connecting to a database, creating the sample database, disconnecting from the database, and writing query output to an Excel sheet. Sample database created for the exercise will be named *exercise_db.db*. Source CSV files will be stored in directly ~/source.
+3. *exercise_util_qc.py* - This module contains the controller and functions for quality control and validation on columns. 
+4. *exercise_database.db* - SQLite database file generated with all CSV files from `sqlalchemy`.
+5. *exercise_results.xlsx* - This file contains the output of indvidual exercises written in sheets within the workbook. If a sheet exists, the sheet will be written over.
+6. *q2_close_ended.sql* - This file SQL query for answering question and JSON-style parameters embedded into the top comment block.
+7. *img_q2_close_ended.sql.png* - Simple bar chart for visualizing results from above.
+8. *q2_open_ended.sql* - This file SQL query for answering question and JSON-style parameters embedded into the top comment block.
+9. *img_q2_open_ended.sql.png* - Simple bar chart for visualizing results from above.
+10. *q3_close_ended.sql* - This file SQL query for answering question and JSON-style parameters embedded into the top comment block.
+11. *img_q3_close_ended.sql.png* - Simple pie chart for visualizing results from above.
+12. *exercise_3_email.md* - Sample email to product or business leader written with markdown to try to capture what it may be like on Outlook or Slack.
 
 ### EXPLORING THE DATA ###
 
